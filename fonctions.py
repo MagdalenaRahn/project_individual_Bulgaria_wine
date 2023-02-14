@@ -35,6 +35,54 @@ seed = 23
 
 
 
+# heatmap 
+
+def heat(train):
+    
+    '''
+    this function takes in a dataframe and makes a heatmap
+    '''
+    
+    plt.figure(figsize = (16,8))
+    sns.heatmap(train.corr(), cmap = 'Oranges', cbar = True,
+                annot_kws = {'fontsize' : 8}, mask = np.triu(train.corr()))
+
+    plt.show()
+    
+    
+
+
+# function to plot income in initial exploration : monovariable
+
+def plot_income(coup):
+    
+    '''
+    this function takes in a dataframe and plots
+    income distribution
+    '''
+    
+    result = coup.groupby(["income"])['Y'].median().reset_index().sort_values('income', ascending = False)
+
+    fig = sns.barplot(x = 'income', y = "Y", data = coup, order = result['income'])
+
+    plt.legend([],[])
+
+    fig.set(xlabel = 'Income Group In USD', ylabel = 'Liklihood Of Coupon Acceptance')
+
+    plt.xticks(np.arange(-1, 8, step = 0.2))
+
+    labels = ['Less than $12500', '$12500 - $24999', '$25000 - $37499','$37500 - $49999',
+              '$50000 - $62499', '$62500 - $74999', '$75000 - $87499', '$87500 - $99999',
+              '$100000 or More']
+    
+    plt.xticks(ticks = (-1,0,1,2,3,4,5,6,7), labels = labels, rotation = 45)
+    
+    plt.title('Income Groups')
+
+    plt.show()
+
+
+
 def tts_xy(train, val, test, target):
     
     '''
@@ -151,94 +199,91 @@ def plot_weather_coupon(train):
 
     plt.xticks(ticks = (0, 1, 2), labels = labels)
     plt.show()        
-        
-        
-        
-# plotting coupon acceptance in different weather
-
-# def plot_weather(train):
-    
-#     '''
-#     this function plots coupon acceptance based on different
-#     types of weather. It takes in train dataset.
-#     '''
-    
-#     g = sns.catplot(data = train, kind = 'bar', y = 'Y', x = 'weather3')
-
-#     g.set_axis_labels('Snowy (0), Sunny (1), Rainy (2)', 'Liklihood Of Coupon Acceptance')
-
-#     plt.grid()
-
-#     plt.title('Liklihood Of Coupon Acceptance In Different Weather')
-    
-#     plt.show()
+  
     
     
 
 # plotting coupon acceptance for opposite direction   
 
 def plot_opp_dir(train):
-    
-        
+ 
     '''
     this function plots coupon acceptance based on train data for
     people heading in the opposite direction
     '''
     
-    g = sns.catplot(data = train, kind = 'bar', y = 'Y', x = 'dir_opp', hue = 'weather')
-
-    g.set_axis_labels('', 'Liklihood Of Coupon Acceptance')
-
-    plt.grid()
-
-    plt.title('Likelihood Of Coupon Acceptance When Heading In The Opposite Direction In Different Weather')
+    g = sns.diverging_palette(300, 10, s = 90)
     
-    plt.show()
+    sns.countplot(train['dir_opp'], hue = train['Y'], palette = 'GnBu', orient = "h")
+    
+    plt.ylabel('Likelihood Of Coupon Acceptance')
+    plt.xlabel('Heading In The Opposite Direction ?')
+   
+    plt.title('Likelihood Of Coupon Acceptance When Heading In The Opposite Direction')
+    
+    labels = ['No', 'Yes']
+    
+    plt.legend(title = 'Coupon Acceptance', loc = 'upper left', labels = ['No', 'Yes'])    
+    
+    plt.xticks(ticks = (0, 1), labels = labels)
+    plt.show()    
+
     
 
     
 # plotting coupon acceptance based on bar visits
 
-def plot_bar(train):
+def plot_explore_bar(train):
     
+    '''    
+    this function takes in the train dataframe and plots
+    frequency of bar visits per month against likelihood 
+    of accepting the proposed coupon.
     '''
-    this function plots bar-visit frequency based on train data
-    '''
     
-    g = sns.catplot(data = train, kind = 'bar', y = 'Y', x = 'bar')
-
-    g.set_axis_labels('', 'Liklihood Of Coupon Acceptance')
-
-    plt.grid()
-
-    plt.title('Liklihood Of Coupon Based On Frequency Of Bar Visits')
+    g = sns.diverging_palette(300, 10, s = 10)
     
-    plt.show()
+    sns.countplot(train['bar'], hue = train['Y'], palette = 'GnBu', orient = "h")
     
+    plt.ylabel('Likelihood Of Coupon Acceptance')
+    plt.xlabel('Bar Visits Per Month')
+   
+    plt.title('Likelihood Of Coupon Acceptance Based Number Of Bar Visits Per Month')
+    
+    labels = ['Never', 'Less than 1', '1 to 3','4 to 8','More than 4']
+    
+    plt.legend(title = 'Coupon Acceptance', loc = 'upper right', labels = ['No', 'Yes'])    
+    
+    plt.xticks(ticks = (0,1,2,3,4), labels = labels, rotation = 45)
+    plt.show()    
     
     
     
 # plotting income groups and coupon acceptance
+def plot_explore_inc(train):
     
-def plot_inc(train):   
-       
-    '''
-    this function plots income groups based on train data
-    and visualises how they compare to coupon acceptance.S
+    '''    
+    this function takes in the train dataframe and plots
+    income distribution against likelihood of accepting
+    the proposed coupon.
     '''
     
-    plt.figure().set_figwidth(15)
-
-    g = sns.catplot(data = train, kind = 'bar', y = 'Y', x = 'income')
-
-    g.set_axis_labels('', 'Liklihood Of Coupon Acceptance')
-
-    plt.grid()
-
-    plt.xticks(rotation = 45)
-
+    g = sns.diverging_palette(300, 10, s = 90)
+    
+    sns.countplot(train['income'], hue = train['Y'], palette = 'GnBu', orient = "h")
+    
+    plt.ylabel('Likelihood Of Coupon Acceptance')
+    plt.xlabel('Income Group')
+   
     plt.title('Likelihood Of Coupon Acceptance Based On Income Group')
-
+    
+    labels = ['Less than $12500', '$12500 - $24999', '$25000 - $37499','$37500 - $49999',
+              '$50000 - $62499', '$62500 - $74999', '$75000 - $87499', '$87500 - $99999',
+              '$100000 or More']
+    
+    plt.legend(title = 'Coupon Acceptance', loc = 'upper right', labels = ['No', 'Yes'])    
+    
+    plt.xticks(ticks = (-1,0,1,2,3,4,5,6,7), labels = labels, rotation = 45)
     plt.show()    
     
     
