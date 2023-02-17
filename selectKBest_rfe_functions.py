@@ -8,9 +8,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_selection import SelectKBest, f_regression, RFE
 
-from env import host, username, password, get_connection
-import env
-
 
 
 

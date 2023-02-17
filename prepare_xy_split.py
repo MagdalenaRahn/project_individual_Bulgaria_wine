@@ -8,8 +8,6 @@ from pydataset import data
 
 from sklearn.model_selection import train_test_split
 
-from env import host, username, password, get_connection
-
 
 
 def train_val_test(df, col):

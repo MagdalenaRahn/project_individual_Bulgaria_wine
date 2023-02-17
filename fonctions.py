@@ -24,9 +24,6 @@ from sklearn.metrics import classification_report, confusion_matrix, plot_confus
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.ensemble import RandomForestClassifier
 
-from env import get_connection
-# import prepare
-
 
 # turn off pink boxes for demo
 import warnings
